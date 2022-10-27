@@ -1,11 +1,14 @@
 package com.zjlab;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author xue
  * @create 2022-10-27 9:44
  */
+@Slf4j
 public enum AreaJudge {
 
     /**
@@ -17,6 +20,7 @@ public enum AreaJudge {
 
     public void changeArea(CircularAreaJudge circularAreaJudge) {
         if (!circularAreaJudge.equals(areaJudge.get())) {
+            log.info("更换判断区域:{}", circularAreaJudge);
             areaJudge.set(circularAreaJudge);
         }
     }

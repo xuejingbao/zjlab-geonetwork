@@ -17,8 +17,8 @@ public enum Config {
      */
     INSTANCE;
 
-    public final static String ADDRESS = "127.0.0.1";
-    public final static Integer PORT = 5000;
+    public static String ADDRESS = "192.168.137.167";
+    public static Integer PORT = 5000;
     public final static Integer LOCAL_PORT = 6666;
 
     private Double latitude;
@@ -37,6 +37,12 @@ public enum Config {
             } else if ("--rad".equals(argItem)) {
                 i++;
                 this.radius = Integer.parseInt(args[i]);
+            } else if ("--ip".equals(argItem)) {
+                i++;
+                ADDRESS = args[i];
+            } else if ("--port".equals(argItem)) {
+                i++;
+                PORT = Integer.parseInt(args[i]);
             }
         }
         if (latitude == null || longitude == null || radius == null) {

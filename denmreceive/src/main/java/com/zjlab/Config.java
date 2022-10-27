@@ -53,11 +53,15 @@ public enum Config {
             }
         }
         log.info("配置信息读取完成：" +
-                "\n接收端口：{}", receivePort
+                "\nhost: {}" +
+                "\ntopic: {}" +
+                "\nclientId: {}" +
+                "\nuserName: {}" +
+                "\npassword: {}" +
+                "\n接收端口：{}", host, topic, clientId, userName, password, receivePort
         );
         return this;
     }
-
 
 
 }

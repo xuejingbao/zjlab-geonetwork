@@ -11,7 +11,7 @@ public class GpsInput implements Runnable {
 
     @Override
     public void run() {
-        while (Thread.currentThread().isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 Position position = MqttLocation.INSTANCE.getPosition();
                 if (log.isDebugEnabled()) {
