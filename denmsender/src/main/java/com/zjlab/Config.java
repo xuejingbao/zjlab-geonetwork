@@ -17,8 +17,15 @@ public enum Config {
      */
     INSTANCE;
 
+    /**
+     * 基站IP地址
+     */
     public static String ADDRESS = "192.168.137.167";
+    /**
+     * 基站配置 portRcvFromVehicle=5000
+     */
     public static Integer PORT = 5000;
+
     public final static Integer LOCAL_PORT = 6666;
 
     private Double latitude;

@@ -32,7 +32,7 @@ public class CircularAreaJudge {
     public Boolean areaJudge(Position position) {
         GlobalCoordinates target = new GlobalCoordinates(position.getLat(), position.getLon());
         double distance = new GeodeticCalculator()
-                .calculateGeodeticCurve(Ellipsoid.Sphere, circleCenter, target).getEllipsoidalDistance();
+                .calculateGeodeticCurve(Ellipsoid.WGS84, circleCenter, target).getEllipsoidalDistance();
         return distance < radius;
     }
 
