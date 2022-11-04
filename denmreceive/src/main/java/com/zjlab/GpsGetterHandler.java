@@ -31,14 +31,15 @@ public class GpsGetterHandler extends SimpleChannelInboundHandler<ByteBuf> {
             if (log.isDebugEnabled()) {
                 log.debug("获取小车位置信息,经度: {},纬度: {}", lon, lat);
             }
-            WarnMessage warnMessage = AreaJudge.INSTANCE.inside(new Position(lat, lon));
-            if (warnMessage != null) {
+            // WarnMessage warnMessage = AreaJudge.INSTANCE.inside(new Position(lat, lon));
+            String sendMessage = GsonUtil.object2String(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+            channelHandlerContext.writeAndFlush(sendMessage.getBytes(StandardCharsets.UTF_8));
+
+            /*if (warnMessage != null) {
                 log.warn("在警告区域内部，警告点是:{},警告半径:{},当前位置:{}"
                         , warnMessage.getWarnPoint(), warnMessage.getWarnRadius(), warnMessage.getNowPoint());
-                channelHandlerContext.writeAndFlush(GsonUtil.object2String(Arrays.asList(
-                        warnMessage
-                )));
-            }
+                channelHandlerContext.writeAndFlush(GsonUtil.object2String(warnMessage).getBytes(StandardCharsets.UTF_8));
+            }*/
         });
 
     }
