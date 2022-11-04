@@ -26,7 +26,7 @@ public enum GpsService {
 
     public void init() throws InterruptedException {
         bossGroup = new NioEventLoopGroup(1);
-        workGroup = new NioEventLoopGroup(3);
+        workGroup = new NioEventLoopGroup(2);
         ServerBootstrap bootstrap = new ServerBootstrap();
         GpsGetterHandler gpsGetterHandler = new GpsGetterHandler();
         bootstrap.group(bossGroup, workGroup)

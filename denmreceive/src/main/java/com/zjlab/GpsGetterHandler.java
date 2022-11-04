@@ -22,25 +22,33 @@ public class GpsGetterHandler extends SimpleChannelInboundHandler<ByteBuf> {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
         byte[] message = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(message);
-        // 申请多线程执行
-        channelHandlerContext.executor().parent().execute(() -> {
-            String json = new String(message, StandardCharsets.UTF_8);
-            List list = GsonUtil.stringToList(json, List.class).get(0);
-            Double lon = (double) list.get(0);
-            Double lat = (double) list.get(1);
-            if (log.isDebugEnabled()) {
-                log.debug("获取小车位置信息,经度: {},纬度: {}", lon, lat);
-            }
-            // WarnMessage warnMessage = AreaJudge.INSTANCE.inside(new Position(lat, lon));
-            String sendMessage = GsonUtil.object2String(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
-            channelHandlerContext.writeAndFlush(sendMessage.getBytes(StandardCharsets.UTF_8));
+        ByteBuf returnBuf = channelHandlerContext.alloc().buffer();
 
-            /*if (warnMessage != null) {
-                log.warn("在警告区域内部，警告点是:{},警告半径:{},当前位置:{}"
-                        , warnMessage.getWarnPoint(), warnMessage.getWarnRadius(), warnMessage.getNowPoint());
-                channelHandlerContext.writeAndFlush(GsonUtil.object2String(warnMessage).getBytes(StandardCharsets.UTF_8));
-            }*/
-        });
+        String json = new String(message, StandardCharsets.UTF_8);
+        List list = GsonUtil.stringToList(json, List.class).get(0);
+        Double lon = (double) list.get(0);
+        Double lat = (double) list.get(1);
+        if (log.isDebugEnabled()) {
+            log.debug("获取小车位置信息,经度: {},纬度: {}", lon, lat);
+        }
+        WarnMessage warnMessage = AreaJudge.INSTANCE.inside(new Position(lat, lon));
+        List reLs;
+        if (warnMessage == null) {
+            reLs = Arrays.asList(0);
+        } else {
+            log.warn("在警告区域内部，警告点是:{},警告半径:{},当前位置:{}"
+                    , warnMessage.getWarnPoint(), warnMessage.getWarnRadius(), warnMessage.getNowPoint());
+            reLs = Arrays.asList(
+                    0,
+                    warnMessage.getNowPoint().getLon(),
+                    warnMessage.getNowPoint().getLat(),
+                    warnMessage.getWarnPoint().getLon(),
+                    warnMessage.getWarnPoint().getLat(),
+                    warnMessage.getWarnRadius()
+            );
+        }
+        returnBuf.writeBytes(GsonUtil.object2String(reLs).getBytes(StandardCharsets.UTF_8));
+        channelHandlerContext.writeAndFlush(returnBuf);
 
     }
 
