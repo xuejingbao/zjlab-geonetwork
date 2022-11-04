@@ -39,7 +39,7 @@ public class GpsGetterHandler extends SimpleChannelInboundHandler<ByteBuf> {
             log.warn("在警告区域内部，警告点是:{},警告半径:{},当前位置:{}"
                     , warnMessage.getWarnPoint(), warnMessage.getWarnRadius(), warnMessage.getNowPoint());
             reLs = Arrays.asList(
-                    0,
+                    1,
                     warnMessage.getNowPoint().getLon(),
                     warnMessage.getNowPoint().getLat(),
                     warnMessage.getWarnPoint().getLon(),
