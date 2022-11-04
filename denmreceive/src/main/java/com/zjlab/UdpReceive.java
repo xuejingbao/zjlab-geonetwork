@@ -15,12 +15,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @create 2022-10-27 9:15
  */
 @Slf4j
-public class UdpReceive {
+public enum UdpReceive {
+    /**
+     * 单例
+     */
+    INSTANCE;
 
-    private static EventLoopGroup group;
-    private static Channel channel;
+    private EventLoopGroup group;
 
-    public static void init() throws InterruptedException {
+    public void init() throws InterruptedException {
         group = new NioEventLoopGroup(2, new ThreadFactory() {
             private AtomicInteger count = new AtomicInteger(0);
 
@@ -52,7 +55,6 @@ public class UdpReceive {
                 });
 
         ChannelFuture f = bootstrap.bind(Config.INSTANCE.getReceivePort()).sync();
-        channel = f.channel();
         log.info("ReceiveUdp接收端准备就绪...");
         f.channel().closeFuture().addListener(new ChannelFutureListener() {
             @Override
@@ -63,7 +65,7 @@ public class UdpReceive {
     }
 
 
-    public static void stop() {
+    public void stop() {
         if (group != null) {
             group.shutdownGracefully();
         }

@@ -20,13 +20,10 @@ public enum Config {
     INSTANCE;
 
     /**
-     * mqtt相关配置
+     * gps相关配置
      */
-    private String host;
-    private String topic;
-    private String clientId;
-    private String userName;
-    private String password;
+    private String myAddress;
+    private Integer gpsReceivePort;
 
     /**
      * 监听端口
@@ -38,11 +35,8 @@ public enum Config {
         InputStream configInput = Config.class.getClassLoader().getResourceAsStream("car.properties");
         Properties configPro = new Properties();
         configPro.load(configInput);
-        this.host = configPro.getProperty("host");
-        this.topic = configPro.getProperty("topic");
-        this.clientId = configPro.getProperty("clientId");
-        this.userName = configPro.getProperty("userName");
-        this.password = configPro.getProperty("password");
+        this.myAddress = configPro.getProperty("myAddress");
+        this.gpsReceivePort = Integer.parseInt(configPro.getProperty("gpsReceivePort"));
         this.receivePort = Integer.parseInt(configPro.getProperty("receivePort"));
 
         for (int i = 0; i < args.length; i++) {
@@ -50,15 +44,18 @@ public enum Config {
             if ("--recport".equals(argItem)) {
                 i++;
                 this.receivePort = Integer.parseInt(args[i]);
+            } else if ("--gpsport".equals(argItem)) {
+                i++;
+                this.gpsReceivePort = Integer.parseInt(args[i]);
+            } else if ("--myaddr".equals(argItem)) {
+                i++;
+                this.myAddress = args[i];
             }
         }
         log.info("配置信息读取完成：" +
-                "\nhost: {}" +
-                "\ntopic: {}" +
-                "\nclientId: {}" +
-                "\nuserName: {}" +
-                "\npassword: {}" +
-                "\n接收端口：{}", host, topic, clientId, userName, password, receivePort
+                "\nmyAddress: {}" +
+                "\ngpsReceivePort: {}" +
+                "\n接收端口：{}", myAddress, gpsReceivePort, receivePort
         );
         return this;
     }
